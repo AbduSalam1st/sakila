@@ -1,0 +1,22 @@
+services:
+  database:
+    image: official_sql_img
+    environment:
+    - MYSQL_USER=abdul
+    - MYSQL_PASSWORD=root
+    - MYSQL_DATABASE=sakila
+    restart: always
+    volumes:
+      - my_db_data:/var/lib/mysql
+
+  flask-api:
+    image: official_flask-api_img
+    ports:
+      - "8000:5000"   
+    environment:
+      DATABASE_URI: "mysql://abdul:root@database:3306/sakila"
+      FLASK_ENV: PRODUCTION  ### its talking to the database MYSQL
+      
+volumes:
+  my_db_data:
+
