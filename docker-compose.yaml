@@ -10,7 +10,7 @@ services:
       - my_db_data:/var/lib/mysql
 
   flask-api:
-    image: official_flask-api_img
+    image: flask_img
     ports:
       - "8000:5000"   
     environment:

@@ -1,14 +1,14 @@
-FROM python:3.12
+FROM python:3.12 AS builder 
 
-
-WORKDIR /usr/src/app
-
-
+WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
 
+FROM python:3.12
+WORKDIR /app
+COPY --from=builder /usr/local /usr/local
+COPY . .
 
 ENV FLASK_APP=app.py
 EXPOSE 8000
