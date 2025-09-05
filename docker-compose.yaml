@@ -7,16 +7,28 @@ services:
     - MYSQL_DATABASE=sakila
     restart: always
     volumes:
-      - my_db_data:/var/lib/mysql
+      - my_db_data:/var/lib/mysql 
 
   flask-api:
-    image: flask_img
-    ports:
-      - "8000:5000"   
+    image: flask_img 
     environment:
       DATABASE_URI: "mysql://abdul:root@database:3306/sakila"
-      FLASK_ENV: PRODUCTION  ### its talking to the database MYSQL
+      FLASK_ENV: PRODUCTION
+
+  nginx:
+    image: nginx:stable-alpine
+    restart: always
+    ports:
+      - "8000:80"
+    depends_on:
+      flask-api:
+        condition: service_started
+      database:
+        condition: service_started
+      
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+
       
 volumes:
   my_db_data:
-
